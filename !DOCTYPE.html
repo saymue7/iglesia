@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Completa el Versículo</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#6a11cb,#2575fc);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.container{
+background:white;
+max-width:850px;
+width:100%;
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+h1{
+color:#2575fc;
+margin-bottom:15px;
+}
+
+#timer{
+font-size:28px;
+font-weight:bold;
+color:#e74c3c;
+margin-bottom:20px;
+}
+
+#pregunta{
+font-size:1.4rem;
+line-height:1.8;
+margin-bottom:20px;
+min-height:120px;
+}
+
+input{
+width:80%;
+max-width:350px;
+padding:12px;
+font-size:18px;
+text-align:center;
+border:2px solid #2575fc;
+border-radius:10px;
+}
+
+button{
+padding:12px 25px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+background:#2575fc;
+color:white;
+}
+
+button:hover{
+opacity:.9;
+}
+
+#resultado{
+margin-top:15px;
+font-size:1.3rem;
+font-weight:bold;
+min-height:40px;
+}
+
+#puntaje{
+margin-top:15px;
+font-size:1.3rem;
+color:#f39c12;
+font-weight:bold;
+}
+
+.verso{
+margin-top:20px;
+background:#f5f5f5;
+padding:12px;
+border-radius:10px;
+font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>📖 Completa el Versículo</h1>
+
+<div id="timer">
+⏰ Tiempo: 05:00
+</div>
+
+<div id="pregunta">
+Presiona COMENZAR para iniciar.
+</div>
+
+<input
+type="text"
+id="respuesta"
+placeholder="Escribe la palabra faltante"
+style="display:none;"
+>
+
+<br>
+
+<button id="btnComenzar" onclick="siguientePregunta()">
+🚀 Comenzar
+</button>
+
+<button id="btnVerificar"
+onclick="verificar()"
+style="display:none;">
+✅ Verificar
+</button>
+
+<div id="resultado"></div>
+
+<div id="puntaje">
+🏆 Puntaje: 0
+</div>
+
+<div class="verso">
+Romanos 8:15
+</div>
+
+</div>
+
+<script>
+
+const preguntas = [
+
+{
+frase:"Pues no habéis recibido el espíritu de __________ para estar otra vez en temor.",
+respuesta:"esclavitud"
+},
+
+{
+frase:"Sino que habéis recibido el espíritu de __________.",
+respuesta:"adopcion"
+},
+
+{
+frase:"Por el cual clamamos: ¡Abba, ________!",
+respuesta:"padre"
+},
+
+{
+frase:"Pues no habéis recibido el espíritu de esclavitud para estar otra vez en ________.",
+respuesta:"temor"
+},
+
+{
+frase:"Habéis recibido el espíritu de adopción, por el cual __________.",
+respuesta:"clamamos"
+},
+
+{
+frase:"¡Abba, __________!",
+respuesta:"padre"
+}
+
+];
+
+let actual = 0;
+let puntos = 0;
+
+let tiempo = 300;
+let iniciado = false;
+let terminado = false;
+
+function iniciarTimer(){
+
+if(iniciado) return;
+
+iniciado = true;
+
+const intervalo = setInterval(()=>{
+
+if(terminado){
+
+clearInterval(intervalo);
+return;
+
+}
+
+tiempo--;
+
+const min =
+Math.floor(tiempo/60);
+
+const seg =
+tiempo%60;
+
+document.getElementById("timer").innerHTML =
+`⏰ Tiempo: ${String(min).padStart(2,"0")}:${String(seg).padStart(2,"0")}`;
+
+if(tiempo<=0){
+
+finalizar();
+
+clearInterval(intervalo);
+
+}
+
+},1000);
+
+}
+
+function siguientePregunta(){
+
+iniciarTimer();
+
+document.getElementById("btnComenzar").style.display="none";
+document.getElementById("btnVerificar").style.display="inline-block";
+document.getElementById("respuesta").style.display="inline-block";
+
+mostrarPregunta();
+
+}
+
+function mostrarPregunta(){
+
+if(actual>=preguntas.length){
+
+finalizar();
+return;
+
+}
+
+document.getElementById("pregunta").innerHTML =
+`📖 Pregunta ${actual+1} de ${preguntas.length}<br><br>${preguntas[actual].frase}`;
+
+document.getElementById("respuesta
